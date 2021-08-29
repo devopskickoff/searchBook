@@ -3,18 +3,23 @@ const APP_KEY = '';
 var pageNum = 1;
 var size = 10;
 var title;
+var targets;
 
 $(function () {
     $("#search").on("click", function () {
         pageNum = 1;
         title = $("#searchText").val();
+        targets = $('#targetType').val();
+        if(title!=""){
         $("#result").html("");
+        $("#result").addClass("result-visible");
         getApi(title, $('#targetType').val());
         $("#searchText").val("");
         $("#searchHistory").append(`<div class="history">
                                         <span onClick='clickHitory(this)'>${title}</span>
-                                        <span class="remove" onClick='removeHistory(this)'>x</span></span>
+                                        <span class="remove" onClick='removeHistory(this)'>X</span></span>
                                     </div>`);
+        }
     });
 });
 
@@ -26,16 +31,18 @@ $(window).scroll(function () {
 })
 
 
-function getApi(title, target) {
+function getApi(title, targets) {
     $.ajax({
         method: "GET",
         url: "https://dapi.kakao.com/v3/search/book?",
-        data: {'query': title, 'page': pageNum, 'size': size, 'target': target},
+        data: {'query': title, 'page': pageNum, 'size': size, 'target': targets},
         headers: {'Authorization': `KakaoAK ${APP_KEY}`}
     })
         .done(function ({documents}) {
             if (documents.length !== 0) {
                 setBookHtml(documents);
+            } else {
+                $("#result").html("<div>결과가 없습니다</div>");
             }
         });
 }
