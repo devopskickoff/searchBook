@@ -1,4 +1,4 @@
-# searchBook
+# Finding your book
 
 ## 카카오 책 검색 API와 jQuery를 활용해 만든 책 검색사이트
 
